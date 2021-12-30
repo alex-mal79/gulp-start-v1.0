@@ -1,0 +1,11 @@
+// .content
+.content{
+    width: 100%;
+// .content__container
+    &__container{
+    }
+// .content__body
+    &__body {
+        background-color: cornsilk;
+    }
+}

@@ -1,0 +1,53 @@
+//==============================================================
+//      Подключение шрифтов
+//==============================================================
+@mixin font($font_name, $file_name, $weight, $style) {
+    @font-face {
+    font-family: $font_name;
+    font-display: swap;
+    src: url("../fonts/#{$file_name}.woff") format("woff"), url("../fonts/#{$file_name}.woff2") format("woff2");
+    font-weight: #{$weight};
+    font-style: #{$style};
+    }
+}
+//==============================================================
+//      Адаптивное свойство
+//==============================================================
+@function strip-units($number) {
+    @return $number / ($number * 0 + 1);
+    }
+
+@mixin adaptive-value($property, $startSize, $minSize, $type){
+    $addSize: $startSize - $minSize;
+    //Если меньше контейнера
+    @if $type == 1{
+        #{$property}: $startSize + px;
+        @media (max-width: #{$maxWidthContainer}){
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{strip-units($maxWidthContainer) - 320}));
+        }
+    } 
+    //Если больше контейнера
+    @else if $type == 2{
+        #{$property}: $startSize + px;
+        @media (min-width: #{$maxWidthContainer}){
+            #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{strip-units($maxWidth) - 320}));
+        }
+    } 
+    //Всегда
+    @else {
+        #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{strip-units($maxWidth) - 320}));
+    }
+}
+//==============================================================
+//      Адаптивный шрифт
+//==============================================================
+@mixin adaptive-font($pcSize, $mobSize){
+    $addSize: $pcSize - $mobSize;
+    $addMobSize: $addSize + $addSize * 0.7;
+    @media(max-width: 767px){
+        font-size: calc(#{$mobSize +px} + #{$addMobSize} * ((100vw - 320px) / #{strip-units($maxWidth)}));
+    }
+    @media(min-width: 767px){
+        font-size: calc(#{$mobSize +px} + #{$addSize} * (100vw / #{strip-units($maxWidth)}));
+    }
+}
